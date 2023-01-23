@@ -1,0 +1,62 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.gitconfig --apply`. 
+
+[user]
+	name = {{ .git.user.name | quote }}
+	email = {{ .git.user.email | quote }}
+
+[init]
+	defaultBranch = main
+	
+[credential]
+    helper = cache --timeout={{ .git.credential.helper.cache.timeout }}
+
+{{- if (index . "git") }}
+{{- if (index . "git" "credential") }}
+{{- if (index . "git" "credential" "helpers") }}
+{{- if (index . "git" "credential" "helpers" "static") }}
+{{- range .git.credential.helpers.static }}
+
+# Force {{.site}} to use given username and password
+[credential "{{.site}}"]
+	# see https://git-scm.com/docs/gitcredentials#_custom_helpers for elaboration
+	helper = "!f() { echo \"username={{.username}}\\npassword={{.password}}\"; }; f"
+{{- end }}
+{{- end }}
+{{- end}}
+{{- end}}
+{{- end}}
+
+{{- if (index . "git") }}
+{{- if (index . "git" "credential") }}
+{{- if (index . "git" "credential" "helpers") }}
+{{- if (index . "git" "credential" "helpers" "env") }}
+{{- range .git.credential.helpers.env }}
+
+# Setup {{.site}} so that when Git needs username/password, they are retrieved from environment variables ${{.env_var_name_prefix}}USERNAME and ${{.env_var_name_prefix}}PASSWORD
+[credential "{{.site}}"]
+	# see https://git-scm.com/docs/gitcredentials#_custom_helpers for elaboration
+	helper = "!f() { echo \"username=${{.env_var_name_prefix}}USERNAME\\npassword=${{.env_var_name_prefix}}PASSWORD\"; }; f"
+{{- end }}
+{{- end }}
+{{- end}}
+{{- end}}
+{{- end}}
+
+{{- if (index . "github") }}
+{{- if (index . "github" "user") }}
+{{- if (index . "github" "user" "prime") }}
+{{- with .github.user.prime }}
+{{- if and (index . "id") (index . "pat") (index . "insteadof_in_gitconfig") }}
+
+[url "https://{{ .id }}:{{ .pat }}@github.com"]
+	insteadOf = https://github.com
+{{- else}}	
+# 'id' 'pat' and 'insteadof_in_gitconfig' required in '.github.user.prime' if this is desired:
+# [url "https://id:pat@github.com"]
+#     insteadOf = https://github.com
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- end}}

@@ -1,0 +1,20 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.config/fish/conf.d/chezmoi.fish --apply`. 
+
+alias chez="chezmoi"
+alias cheza="chezmoi apply"
+alias cdchez="cd (chezmoi source-path)"
+alias chez-code="code (chezmoi source-path)/home.code-workspace"
+
+{{- if (index . "github") }}
+{{- if (index . "github" "user") }}
+{{- if (index . "github" "user" "prime" "pat") }}
+export CHEZMOI_GITHUB_ACCESS_TOKEN="{{ .github.user.prime.pat }}"
+{{- else}}
+# '.github.user.prime.pat' required in chezmoi.toml if this is desired:
+#export CHEZMOI_GITHUB_ACCESS_TOKEN="..."
+{{- end}}
+{{- end}}
+{{- end}}
+
+~/bin/chezmoi completion fish | source

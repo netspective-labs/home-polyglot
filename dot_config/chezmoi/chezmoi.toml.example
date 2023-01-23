@@ -1,0 +1,60 @@
+#---------------------------------------------------------------------------------
+# If you need a variable to help isolate machine- or user-specific and secrets 
+# configuration first review https://www.chezmoi.io/reference/templates/variables/ 
+# and then, if an existing variable will not work, add a new [data.*] variable. 
+# All variables defined in the [data] section will be available as `.x.y.z` in 
+# chezmoi *.tmpl. In the CLI you can run `chezmoi data` to see what's available.
+#---------------------------------------------------------------------------------
+# If there are variables needed that are not machine-specific or user-specific
+# then define those using `.chezmoidata.$FORMAT` strategy (see chezmoi docs).
+#---------------------------------------------------------------------------------
+[data]
+    [data.git.user]
+        name = "Shahid N. Shah"
+        email = "user@email.com"
+
+    # add [data.git.credential.helpers.static.GITHUB] if you want the following in .gitconfig:
+    # [credential "https://github.com"]
+    #    helper = "!f() { echo \"username=user@email.com\\npassword=secret\"; }; f"
+    [data.git.credential.helpers.static.GITHUB]
+        site = "https://github.com"
+        username = "username"
+        password = "secret"
+        type = "GitHub Personal Access Token"
+        expires = "12/31/2021"
+
+    # add [data.github.user.prime.*] if you want the following in .gitconfig:
+    # [url "https://gitHubUserHandle:PERSONAL_ACCESS_TOKEN_VALUE@github.com"]
+    #    insteadOf = https://github.com    
+    # add [data.github.user.prime.pat] if you want the following:
+    #    in `.eget.toml`:
+    #        github_token = "{{ .github.user.prime.pat }}"
+    #    in `dot_config/fish/conf.d/chezmoi.fish.tmpl`:
+    #        export CHEZMOI_GITHUB_ACCESS_TOKEN="{{ .github.user.prime.pat }}"
+    [data.github.user.prime]
+        id = 'gitHubUserHandle'
+        pat = 'PERSONAL_ACCESS_TOKEN_VALUE'
+        insteadof_in_gitconfig = "yes"
+        
+    # add [data.git.credential.helpers.static.GIT_EXAMPLE_COM] if you want the following in .gitconfig:
+    # [credential "https://git.example.com"]
+    #    helper = "!f() { echo \"username=user@email.com\\npassword=secret\"; }; f"
+    [data.git.credential.helpers.static.GIT_EXAMPLE_COM]
+        site = "https://git.example.com"
+        username = "user@email.com"
+        password = "secret"
+        type = "GitLab Personal Access Token"
+        expires = "12/31/2021"
+
+    # add [data.git.credential.helpers.env.GIT_EXAMPLE_COM] if you want the following in .gitconfig:
+    # [credential "https://git.example.com"]
+    #    helper = "!f() { echo \"username=$GIT_CRED_GIT_EXAMPLE_COM_USERNAME\\npassword=$GIT_CRED_GIT_EXAMPLE_COM_PASSWORD\"; }; f"
+    [data.git.credential.helpers.env.GIT_EXAMPLE_COM]
+        site = "https://git.example.com"
+        env_var_name_prefix = "GIT_CRED_GIT_EXAMPLE_COM_"
+
+    # typical asdf packages are "universal" and defined in `.chezmoidata.toml`; add list of strings in 
+    # `data.packages.asdf.user.plugins_auto_install` if you want some personal packages installed by `asdf`;
+    # see https://github.com/asdf-vm/asdf-plugins for existing plugins; or, run `asdf plugin list all`
+    # [data.packages.asdf.user]
+    #     plugins_auto_install = ["mypkg1", "mypkg2"]

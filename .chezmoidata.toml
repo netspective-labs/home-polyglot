@@ -1,0 +1,21 @@
+#---------------------------------------------------------------------------------
+# If you need a variable to define reusable data across all machines first review 
+# https://www.chezmoi.io/reference/templates/variables/ and then, if an existing
+# variable will not work, add a new variable in this file. All variables defined
+# in this file will be available as `.x.y.z` in all chezmoi *.tmpl files. In the
+# CLI you can run `chezmoi data` to see what's available.
+#---------------------------------------------------------------------------------
+# If there are variables needed that are machine-specific or user-specific then 
+# define in [data] section of ~/.config/chezmoi/chezmoi.toml on each machine, not
+# in this file. 
+#---------------------------------------------------------------------------------
+#*****     THERE SHOULD BE NO SECRETS OR CONFIDENTIAL DATA IN THIS FILE      *****
+#---------------------------------------------------------------------------------
+
+[git.credential.helper.cache]
+    timeout = 2592000 # 30 days
+
+[packages.asdf]
+    # see https://github.com/asdf-vm/asdf-plugins for existing plugins; or, run `asdf plugin list all`
+    # if you have a special package to install that not everyone else might need, define those in ~/.config/chezmoi/chezmoi.toml
+    plugins_auto_install = ["dasel", "deno", "exa", "fzf", "github-cli", "glab", "gojq", "opa", "rclone", "sqlite", "steampipe", "usql", "zoxide"]

@@ -1,0 +1,34 @@
+#!/bin/bash
+# This binary is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/bin/nlh-doctor --apply`. 
+
+set -uo pipefail
+
+# TODO: check nlh-* log files and report errors count (suggest troubleshooting)
+
+echo "curl `curl --version | head -n 1 | awk '{ print $2 }'`"
+wget --version | head -n 1
+git --version
+chezmoi --version
+echo "pass `pass version | grep -oh 'v[0-9]*\.[0-9]*\.[0-9]*'`"
+osqueryi --version 2>/dev/null || echo "WARNING: osquery not installed"
+jq --version
+git-semtag --version
+echo "git-mgitstatus `git-mgitstatus --version`"
+echo "daff `daff version`"
+envsubst --version | head -n 1
+echo "Deno in PATH for VS Code, et. al: `whereis deno`"
+echo "adlc `adlc show --version` (lib in $HOME/.local/share/adl)"
+eget --version
+psql --version
+mysql --version
+
+# NLH standard is to put all GitHub-downloadable packages in ~/.eget.toml and
+# we store our own extra properties per package so we can auto-generate the
+# documentation. Default `jq` cannot parse TOML files so we use `fa-jq` first.
+fa-jq '.[] | select(.nlh_doctor_cmd != null)' ~/.eget.toml -o json | jq -r '.nlh_doctor_cmd' | sort | sh
+
+echo "asdf `asdf --version`"
+for pkg in `asdf plugin list`; do 
+    asdf current $pkg | sed 's/^/  /'
+done

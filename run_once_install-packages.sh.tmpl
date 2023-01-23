@@ -1,0 +1,85 @@
+#!/bin/bash
+set -uo pipefail
+
+# -------------------------------------------------------------------------------------------------
+# ** ALL COMMANDS IN THIS SCRIPT MUST BE IDEMPOTENT **
+# -------------------------------------------------------------------------------------------------
+# This file will be executed after a call to `chezmoi apply` or `chezmoi update` anytime the source 
+# `run_once_install-packages.sh.tmpl` changes; because this file can be run multiple times, be sure 
+# all commands/tasks in this file can safely be run more than once.
+# -------------------------------------------------------------------------------------------------
+# * Use relative paths to find binaries (e.g. ~/bin/xyz) and don't assume anything is in PATH
+# * If you add/remove packages be sure to reflect it in `~/bin/nlh-doctor`.
+# -------------------------------------------------------------------------------------------------
+# If you want to force-run this script after you've updated configs:
+#   chezmoi state delete-bucket --bucket=scriptState
+#   chezmoi apply
+# -------------------------------------------------------------------------------------------------
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+{{- if (index . "github") }}
+{{-   if (index . "github" "user") }}
+{{-     if (index . "github" "user" "prime" "pat") }}
+# set this so that `asdf` and other commands that need to access the GitHub API can use it (helps
+# prevent GitHub rate-limiting based issues)
+export GITHUB_API_TOKEN="{{ .github.user.prime.pat }}"
+{{-     else}}
+# '.github.user.prime.pat' required in chezmoi.toml if this is desired:
+#export GITHUB_API_TOKEN="..."
+{{-     end}}
+{{-   end}}
+{{- end}}
+
+# asdf does not have a "quiet" mode so we'll just store output in a log file
+NLH_ASDF_LOG=~/.nlh-intall-asdf-packages.sh.log
+touch $NLH_ASDF_LOG
+echo "--- `date` ---" >> $NLH_ASDF_LOG
+printf "Installing asdf-managed packages (tail -f ~/.nlh-intall-asdf-packages.sh.log)..."
+
+# see https://github.com/asdf-vm/asdf-plugins for existing plugins;
+# or, run `asdf plugin list all` to see which are available
+asdf_user_packages=""
+{{- if (index . "packages") }}
+{{-   if (index . "packages" "asdf" "user") }}
+{{-     if (index . "packages" "asdf" "user" "plugins_auto_install") }}
+# set this so that `asdf` and other commands that need to access the GitHub API can use it (helps
+# prevent GitHub rate-limiting based issues)
+asdf_user_packages="{{ .packages.asdf.user.plugins_auto_install | join " " }}"
+{{-     end}}
+{{-   end}}
+{{- end}}
+
+for pkg in $asdf_user_packages {{ .packages.asdf.plugins_auto_install | join " " }}; do 
+    if ~/.asdf/bin/asdf plugin list | grep -q $pkg; then
+        echo "$pkg plugin already installed, updating" >> $NLH_ASDF_LOG 2>&1
+        ~/.asdf/bin/asdf plugin update $pkg >> $NLH_ASDF_LOG 2>&1
+    else
+        ~/.asdf/bin/asdf plugin add $pkg >> $NLH_ASDF_LOG 2>&1
+    fi
+    ~/.asdf/bin/asdf install $pkg latest >> $NLH_ASDF_LOG 2>&1
+    ~/.asdf/bin/asdf global $pkg latest >> $NLH_ASDF_LOG 2>&1
+done
+
+# Deno was already installed by `asdf` but `deno` must be in a "normal" path for VS Code, etc.
+rm -f $HOME/bin/deno && ln -s $HOME/.asdf/shims/deno $HOME/bin/deno    
+
+# https://api.github.com/repos/hayd/deno-udd (`udd`) is a Deno package to update dependencies
+export UDD_VERSION=`curl -fsSL https://api.github.com/repos/hayd/deno-udd/tags | jq '.[0].name' -r`
+DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f -n udd https://deno.land/x/udd@${UDD_VERSION}/main.ts >> $NLH_ASDF_LOG 2>&1
+
+curl -fsSL "https://raw.githubusercontent.com/pnikosis/semtag/master/semtag" > ~/bin/git-semtag
+chmod +x ~/bin/git-semtag
+curl -fsSL "https://raw.githubusercontent.com/fboender/multi-git-status/master/mgitstatus" > ~/bin/git-mgitstatus
+chmod +x ~/bin/git-mgitstatus
+curl -fsSL "https://raw.githubusercontent.com/kamranahmedse/git-standup/master/git-standup" > ~/bin/git-standup
+chmod +x ~/bin/git-standup
+
+# https://github.com/paulfitz/daff aligns and compares tables; `daff` authors don't create a binary distribution so we built our own and download it from our repo
+curl -fsSL "https://github.com/netspective-studios/redistributables/raw/master/linux/daff-1.3.46-haxe2cpp-amd64-debug" > ~/bin/daff
+chmod +x ~/bin/daff
+
+echo "done."
+printf "Inspect ${YELLOW}$NLH_ASDF_LOG${NC}: ${RED}`grep error $NLH_ASDF_LOG | wc -l`${NC} potential error messages\n"

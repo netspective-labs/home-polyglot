@@ -1,0 +1,102 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.eget.toml --apply`. 
+
+# see https://github.com/zyedidia/eget#configuration
+[global]
+  target = "~/bin"
+{{- if (index . "github") }}
+{{- if (index . "github" "user") }}
+{{- if (index . "github" "user" "prime" "pat") }}
+  github_token = "{{ .github.user.prime.pat }}"
+{{- else}}	
+  # '.github.user.prime.pat' required in chezmoi.toml if this is desired:
+  # github_token = "ghp_1234567890"
+{{- end}}
+{{- end}}
+{{- end}}  
+  quiet = false
+  show_hash = false
+  upgrade_only = false
+
+# TODO: if any of the following GitHub binaries are available as asdf plugins, switch from eget to asdf
+# -----------------------------------------------------------------------------------------------------
+# `run_after_dot_eget.toml.sh` will be executed by chezmoi if this file is edited and applied.
+# -----------------------------------------------------------------------------------------------------
+# the keys `nlh_repo_url` and `nlh_description` are not recognized by `eget`,
+# the NLH documentation system uses it like this:
+# fa-jq '.[] | select(.nlh_repo_url != null) | { package: .nlh_repo_url, description: .nlh_description, doctorCmd: .nlh_doctor_cmd } ' ~/.eget.toml -o json | jq
+
+["https://github.com/jzelinskie/faq/releases/download/0.0.7/faq-linux-amd64"]
+  target = "~/bin/fa-jq"
+  nlh_repo_url = "https://github.com/jzelinskie/faq"
+  nlh_description = "Format Agnostic jQ -- process various formats with libjq"
+  nlh_doctor_cmd = "fa-jq --version | head -n 1"
+
+["JanDeDobbeleer/oh-my-posh"]
+  asset_filters = [ "posh-linux-amd64" ]
+  nlh_repo_url = "https://github.com/JanDeDobbeleer/oh-my-posh"
+  nlh_description = "https://ohmyposh.dev/ prompt theme engine"
+  nlh_doctor_cmd = "echo \"oh-my-posh `oh-my-posh --version`\""
+
+["mondoohq/cnquery"]
+  asset_filters = [ "cnquery_7.13.2_linux_amd64.tar.gz" ]
+  nlh_repo_url = "https://github.com/mondoohq/cnquery"
+  nlh_description = "cnquery cloud-native asset inventory"
+  nlh_doctor_cmd = "cnquery version"
+
+["helix-editor/helix"]
+  nlh_repo_url = "https://github.com/helix-editor/helix"
+  nlh_description = "Helix modern terminal editor"
+  nlh_doctor_cmd = "hx --version"
+
+["kashav/fsql"]
+  asset_filters = [ "fsql-linux-amd64.tar.gz" ]
+  nlh_repo_url = "https://github.com/kashav/fsql"
+  nlh_description = "fsql searches for files using SQL-like language"
+  nlh_doctor_cmd = "fsql --version"
+
+["filhodanuvem/gitql"]
+  nlh_repo_url = "https://github.com/filhodanuvem/gitql"
+  nlh_description = "Git repo query language"
+  nlh_doctor_cmd = "gitql --version"
+
+["mergestat/mergestat-lite"]
+  nlh_repo_url = "https://github.com/mergestat/mergestat-lite"
+  nlh_description = "query git repositories with SQL"
+
+["johnkerl/miller"]
+  asset_filters = [ ".tar.gz" ]
+  nlh_repo_url = "https://github.com/johnkerl/miller"
+  nlh_description = "Miller is like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON"
+  nlh_doctor_cmd = "mlr --version"
+
+["lesovsky/pgcenter"]
+  asset_filters = [ ".tar.gz" ]
+  nlh_repo_url = "https://github.com/lesovsky/pgcenter"
+  nlh_description = "pgcenter admin tool for observing and troubleshooting Postgres"
+  nlh_doctor_cmd = "pgcenter --version"
+
+["shenwei356/csvtk"]
+  nlh_repo_url = "https://github.com/shenwei356/csvtk"
+  nlh_description = "csvtk is a cross-platform, efficient and practical CSV/TSV toolkit"
+  nlh_doctor_cmd = "csvtk version"
+
+["BurntSushi/xsv"]
+  nlh_repo_url = "https://github.com/BurntSushi/xsv"
+  nlh_description = "xsv is a fast CSV command line toolkit"
+  nlh_doctor_cmd = "echo \"xsv `xsv --version`\""
+
+["cube2222/octosql"]
+  nlh_repo_url = "https://github.com/cube2222/octosql"
+  nlh_description = "octosql is a query tool that allows you to join, analyse and transform data from multiple databases and file formats using SQL"
+  nlh_doctor_cmd = "octosql --version"
+
+["harelba/q"]
+  nlh_repo_url = "https://github.com/harelba/q"
+  nlh_description = "q runs SQL directly on delimited files and multi-file sqlite databases"
+  nlh_doctor_cmd = "q --version 2>&1 | head -n 1"
+
+["TheWaWaR/simple-http-server"]
+  nlh_repo_url = "https://github.com/TheWaWaR/simple-http-server"
+  nlh_description = "simple-http-server is a tiny web server for local development use"
+  nlh_doctor_cmd = "simple-http-server --version"

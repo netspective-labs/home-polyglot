@@ -1,0 +1,36 @@
+-- This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+-- To modify, use `chezmoi edit ~/.usqlrc --apply`. 
+------------------------------------------------------------------------------
+-- https://github.com/xo/usql Runtime Configuration (RC) File should mirror      
+-- `~/.psqlrc` except when `usql` does not support a feature.
+------------------------------------------------------------------------------
+
+\set QUIET ON
+
+-- TODO: Colored prompt that looks like `(user@host:port) database> `
+-- \set PROMPT1 '%[%033[2;5;27m%]%(%n@%M:%>)%[%033[0m%] %001%[%033[1;33;40m%]%002%/%001%[%033[0m%]> '
+
+-- TODO: PROMPT2 is printed when the prompt expects more input, like when you type
+-- SELECT * FROM<enter>. %R shows what type of input it expects.
+-- \set PROMPT2 '[more] %R > '
+
+-- Use best available output format
+\x auto
+
+\set VERBOSITY verbose
+\set HISTFILE ~/.cache/usql_history
+\set HISTCONTROL ignoredups
+\set PAGER always
+\set HISTSIZE 2000
+\set ECHO_HIDDEN OFF
+\set COMP_KEYWORD_CASE upper
+
+\timing
+
+\pset null '*'
+\pset linestyle unicode
+\pset border 2
+
+\pset format wrapped
+
+\set QUIET OFF

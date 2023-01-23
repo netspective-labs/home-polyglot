@@ -1,0 +1,6 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.config/direnv/direnvrc --apply`. 
+
+# Uncomment the following line to make direnv silent by default.
+# export DIRENV_LOG_FORMAT=""
+export DIRENV_LOG_FORMAT=$'\E[1;30mdirenv: %s\E[0m'

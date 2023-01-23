@@ -1,0 +1,4 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/workspaces/.envrc --apply`. 
+
+export MANAGED_GIT_WORKSPACES_HOME=$HOME/workspaces

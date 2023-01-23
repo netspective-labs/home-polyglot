@@ -1,0 +1,8 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.config/direnv/direnv.toml --apply`. 
+
+# see https://direnv.net/man/direnv.toml.1.html
+# we're assuming our workspaces are safe so we're whitelisting so `direnv allow` is not required for certain directories
+[whitelist]
+  # prefix = [ "/home/user/code/project-a" ]
+  exact = [ "/home/{{ .chezmoi.username }}/workspaces" ]

@@ -1,0 +1,2 @@
+# hostname:port:database:username:password
+# 192.168.2.x:5432:database:postgres:sup3rSecure!

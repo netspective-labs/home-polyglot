@@ -1,0 +1,51 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"mikestead.dotenv",
+			"yzhang.markdown-all-in-one",
+			"coenraads.bracket-pair-colorizer-2",
+			"shd101wyy.markdown-preview-enhanced",
+			"bungcip.better-toml",
+			"casualjim.gotemplate",
+			"jetpack-io.devbox",
+			"bmalehorn.vscode-fish",
+			"stateful.runme",
+			"hediet.vscode-drawio",
+			"terrastruct.d2",
+			"denoland.vscode-deno",
+			"jmviz.quote-list"
+		]
+	},
+	"settings": {
+		"git.autofetch": true,
+		"terminal.integrated.fontFamily": "CascadianCode NF",
+		"editor.formatOnSave": true,
+		"files.associations": {
+			"*.sh.tmpl": "shellscript",
+			"*.fish.tmpl": "fish",
+			"chezmoi.toml.example": "toml"
+		},
+		"hediet.vscode-drawio.theme": "atlas",
+		"deno.enable": true,
+		"deno.path": "../../../bin/deno",
+		"deno.lint": true,
+		"deno.unstable": true,
+		"deno.codeLens.implementations": false,
+		"[typescript]": {
+			"editor.defaultFormatter": "denoland.vscode-deno"
+		},
+		"deno.inlayHints.enumMemberValues.enabled": false,
+		"deno.inlayHints.functionLikeReturnTypes.enabled": false,
+		"deno.inlayHints.parameterNames.enabled": "none",
+		"deno.inlayHints.parameterNames.suppressWhenArgumentMatchesName": false,
+		"deno.inlayHints.parameterTypes.enabled": false,
+		"deno.inlayHints.propertyDeclarationTypes.enabled": false,
+		"deno.inlayHints.variableTypes.enabled": false,
+		"deno.inlayHints.variableTypes.suppressWhenTypeMatchesName": false,
+	}
+}
