@@ -5,6 +5,23 @@
 export IS_NLH=1
 export IS_NLH_WSL=0
 
+{{- if (index . "git") }}
+{{-     if (index . "git" "credential") }}
+{{-         if (index . "git" "credential" "helpers") }}
+{{-             if (index . "git" "credential" "helpers" "static") }}
+{{-                 range $key, $elem := .git.credential.helpers.static }}
+
+# {{$elem.site}} env vars generated from chezmoi data
+export NLH_{{$key}}_USERNAME="{{$elem.username}}"
+export NLH_{{$key}}_PASSWORD="{{$elem.password}}"
+export NLH_{{$key}}_HTTP_AUTHZ="{{$elem.username}}:{{$elem.password}}"
+
+{{-                 end }}
+{{-             end }}
+{{-         end }}
+{{-     end }}
+{{- end }}
+
 set osVersion (cat /proc/version | string split0)
 if string match -rq "(Microsoft|WSL)" $osVersion
     if string match -rq WSL2 $osVersion
