@@ -1,0 +1,21 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/workspaces/.envrc --apply`. 
+
+export MANAGED_GIT_WORKSPACES_HOME=$HOME/workspaces
+
+{{- if (index . "git") }}
+{{-     if (index . "git" "credential") }}
+{{-         if (index . "git" "credential" "helpers") }}
+{{-             if (index . "git" "credential" "helpers" "static") }}
+{{-                 range $key, $elem := .git.credential.helpers.static }}
+
+# {{$elem.site}} (from chezmoi data)
+export NLH_{{$key}}_USERNAME="{{$elem.username}}"
+export NLH_{{$key}}_PASSWORD="{{$elem.password}}"
+export NLH_{{$key}}_HTTP_AUTHZ="{{$elem.username}}:{{$elem.password}}"
+
+{{-                 end }}
+{{-             end }}
+{{-         end }}
+{{-     end }}
+{{- end }}
