@@ -13,7 +13,7 @@ Netspective Labs Home (NLH) conventional .pgpass inspection.
 Usage:
   ${cmd} inspect [--src=<file>] [--mask-password]
   ${cmd} env [--src=<file>] [--no-export] [--prefix=<text>] [--conn-id=<matcher>...] [--warn-no-descriptors]
-  ${cmd} prepare <format> --conn-id=<matcher>... [--all] [--src=<file>]
+  ${cmd} prepare <js-eval-expr> --conn-id=<matcher>... [--all] [--src=<file>]
   ${cmd} (psql-fmt|psql|pgcenter) --conn-id=<matcher>... [--all] [--src=<file>]
   ${cmd} url --conn-id=<matcher>... [--all] [--src=<file>]
   ${cmd} -h | --help
@@ -24,7 +24,8 @@ Options:
   --src=<file>           The source of .pgpass content [default: ${pgPassFile}] 
   --no-export            Don't add 'export' clause to emitted env var lines
   --prefix=<text>        Env var prefix [default: PG_]
-  --conn-id=<matcher>    Connection ID matching regular expression(s)
+  --conn-id=<matcher>    Connection ID matching regular expression(s) using JS \`new RegExp(connId)\`
+  <js-eval-expr>         Javascript eval expression
   --all                  Produce all matching connections, not just the first one
   --warn-no-descriptors  Provide warning for which connections do not provide descriptors
   --version              Show version.
@@ -167,7 +168,7 @@ if (import.meta.main) {
     readonly "--mask-password"?: boolean;
 
     readonly prepare?: boolean;
-    readonly "<format>"?: string;
+    readonly "<js-eval-expr>"?: string;
     prepareFormat?: (conn: Connection) => string;
 
     readonly psql?: boolean;
@@ -198,10 +199,10 @@ if (import.meta.main) {
         // deno-fmt-ignore
         `postgres://${conn.username}:${conn.password}@${conn.host}:${conn.port}/${conn.database}`;
     }
-    if (args.prepare && args["<format>"]) {
+    if (args.prepare && args["<js-eval-expr>"]) {
       // deno-lint-ignore no-unused-vars
       args.prepareFormat = (conn: Connection) => {
-        return eval(args["<format>"]!);
+        return eval(args["<js-eval-expr>"]!);
       };
     }
   } catch (e) {
