@@ -1,21 +1,23 @@
 #!/usr/bin/env -S deno run -A
 
+import * as c from "https://deno.land/std@0.173.0/fmt/colors.ts";
 import * as path from "https://deno.land/std@0.173.0/path/mod.ts";
 import docopt from "https://deno.land/x/docopt@v1.0.7/mod.ts";
-import JSON5 from "npm:json5";
-import { z } from "https://deno.land/x/zod@v3.20.2/mod.ts";
+import { Connection, parse } from "../lib/pgpass.ts";
 
 const cmd = path.basename(import.meta.url);
 const pgPassFile = path.join(`${Deno.env.get("HOME")}`, ".pgpass");
 const doc = `
-Netspective Labs Home (NLH) conventional .pgpass inspection.
+Netspective Labs conventional .pgpass inspection.
 
 Usage:
-  ${cmd} inspect [--src=<file>] [--mask-password]
+  ${cmd} ls conn [--src=<file>]
   ${cmd} env [--src=<file>] [--no-export] [--prefix=<text>] [--conn-id=<matcher>...] [--warn-no-descriptors]
   ${cmd} prepare <js-eval-expr> --conn-id=<matcher>... [--all] [--src=<file>]
   ${cmd} (psql-fmt|psql|pgcenter) --conn-id=<matcher>... [--all] [--src=<file>]
   ${cmd} url --conn-id=<matcher>... [--all] [--src=<file>]
+  ${cmd} test [--src=<file>]
+  ${cmd} inspect [--src=<file>] [--mask-password] [--json]
   ${cmd} -h | --help
   ${cmd} --version
 
@@ -28,9 +30,20 @@ Options:
   <js-eval-expr>         Javascript eval expression
   --all                  Produce all matching connections, not just the first one
   --warn-no-descriptors  Provide warning for which connections do not provide descriptors
+  --json                 Emit in strict JSON format
   --version              Show version.
 
-Help:  
+Help:
+  To test if the .pgpass definitions parse properly:
+
+    pgpass.ts test
+
+    If you get no results, the file is valid otherwise you'll get an issues list
+
+  To see a list of all connections defined in .pgpass:
+
+    pgpass.ts ls conn
+
   To generate an arbitrary string for a connection ID:
 
     pgpass.ts prepare '\`\${conn.database}\`' --conn-id="GITLAB"
@@ -67,203 +80,132 @@ Help:
   NOTE: --conn-id is passed into \`new RegExp(connId)\` so you can use any parseable regex.
 `;
 
-export const connectionDescriptorSchema = z.object({
-  id: z.string(),
-  description: z.optional(z.string()),
-  boundary: z.optional(z.string()),
-  srcLineNumber: z.number(),
-});
-export type ConnectionDescriptor = z.infer<typeof connectionDescriptorSchema>;
+interface Arguments {
+  readonly ls?: boolean;
 
-export const connectionSchema = z.object({
-  connDescr: z.object(connectionDescriptorSchema.shape),
-  host: z.string(),
-  port: z.string().transform<number>((text) => parseInt(text)),
-  database: z.string(),
-  username: z.string(),
-  password: z.string(),
-  srcLineNumber: z.number(),
-});
-export type Connection = z.infer<typeof connectionSchema>;
+  readonly "--src": string;
 
-export async function parse(
-  src: string,
-  options?: { maskPassword?: (passwd: string) => string },
-) {
-  const conns: Connection[] = [];
-  const warnings: { message: string; srcLineNumber: number }[] = [];
-  const pgpass = await Deno.readTextFile(src);
-  let activeConnDescr: ConnectionDescriptor | undefined;
-  let srcLineNumber = 0;
-  for (const line of pgpass.split(/\n/)) {
-    srcLineNumber++;
-    // process comments
-    if (line.match(/^#/)) {
-      // NLH .pgpass convention assumes that before each connection is defined we
-      // should should include a strict JSONL definition that includes a line like
-      // { id: "XYZ", description: "Purpose", boundary: "Network" }
-      if (line.match(/^#\s+\{.*\}\s*$/)) {
-        const jsonl = line.slice(1);
-        try {
-          // remove the starting #, convert to POJO, then let Zod validate it
-          activeConnDescr = connectionDescriptorSchema.parse({
-            // deno-lint-ignore ban-types
-            ...(JSON5.parse(jsonl) as object),
-            srcLineNumber,
-          });
-        } catch (error) {
-          console.error("Unable to parse conn descriptor: ", jsonl);
-          console.error(error);
-        }
-      }
-    } else if (line.trim().length == 0) {
-      // skip blank lines
-    } else {
-      if (!activeConnDescr) {
-        warnings.push({
-          message: "conn has no descriptor preceding it.",
-          srcLineNumber,
-        });
-        continue;
-      }
+  readonly env?: boolean;
+  readonly "--no-export"?: boolean;
+  readonly "--prefix"?: string;
+  readonly "--conn-id"?: string[];
+  "--warn-no-descriptors"?: boolean;
+  connMatchers?: RegExp[];
 
-      // anything that's not a comment is a line like this:
-      // # hostname:port:database:username:password
-      // e.g. 192.168.2.x:5432:database:postgres:sup3rSecure!
-      try {
-        let [host, port, database, username, password] = line.split(":");
-        if (options?.maskPassword) password = options.maskPassword(password);
-        const potentialConn = {
-          connDescr: activeConnDescr,
-          host,
-          port,
-          database,
-          username,
-          password,
-          srcLineNumber,
-        };
-        conns.push(connectionSchema.parse(potentialConn));
-        activeConnDescr = undefined; // reset it since we've used it
-      } catch (error) {
-        console.error("Unable to parse conn: ", line);
-        console.error(error);
-      }
-    }
-  }
-  return { conns, warnings };
+  readonly test?: boolean;
+
+  readonly inspect?: boolean;
+  readonly "--json"?: boolean;
+  readonly "--mask-password"?: boolean;
+
+  readonly prepare?: boolean;
+  readonly "<js-eval-expr>"?: string;
+  prepareFormat?: (conn: Connection) => string;
+
+  readonly psql?: boolean;
+  readonly "psql-fmt"?: boolean;
+  readonly pgcenter?: boolean;
+  readonly url?: boolean;
+
+  readonly "--all": boolean;
+
+  readonly "--version"?: boolean;
+  readonly "--help"?: boolean;
 }
 
-if (import.meta.main) {
-  interface Arguments {
-    readonly "--src": string;
-
-    readonly env?: boolean;
-    readonly "--no-export"?: boolean;
-    readonly "--prefix"?: string;
-    readonly "--conn-id"?: string[];
-    "--warn-no-descriptors"?: boolean;
-    connMatchers?: RegExp[];
-
-    readonly inspect?: boolean;
-    readonly "--mask-password"?: boolean;
-
-    readonly prepare?: boolean;
-    readonly "<js-eval-expr>"?: string;
-    prepareFormat?: (conn: Connection) => string;
-
-    readonly psql?: boolean;
-    readonly "psql-fmt"?: boolean;
-    readonly pgcenter?: boolean;
-    readonly url?: boolean;
-
-    readonly "--all": boolean;
-
-    readonly "--version"?: boolean;
-    readonly "--help"?: boolean;
-  }
-
-  let args: Arguments;
-  try {
-    args = docopt(doc) as unknown as Arguments;
-    if (args.inspect) args["--warn-no-descriptors"] = true;
-    args.connMatchers = args["--conn-id"]
-      ? (args["--conn-id"].map((re) => new RegExp(re)))
-      : undefined;
-    if (args["psql-fmt"] || args.psql || args.pgcenter) {
-      args.prepareFormat = (conn: Connection) =>
-        // deno-fmt-ignore
-        `${args["psql-fmt"] ? '' : args.psql ? 'psql' : 'pgcenter top'} -h ${conn.host} -p ${conn.port} -d ${conn.database} -U ${conn.username}`;
-    }
-    if (args.url) {
-      args.prepareFormat = (conn: Connection) =>
-        // deno-fmt-ignore
-        `postgres://${conn.username}:${conn.password}@${conn.host}:${conn.port}/${conn.database}`;
-    }
-    if (args.prepare && args["<js-eval-expr>"]) {
-      // deno-lint-ignore no-unused-vars
-      args.prepareFormat = (conn: Connection) => {
-        return eval(args["<js-eval-expr>"]!);
-      };
-    }
-  } catch (e) {
-    console.error(e.message);
-    Deno.exit(1);
-  }
-
-  if (args["--version"]) {
-    console.log(`pgpass.ts version 1.0`);
-    Deno.exit(0);
-  }
-
-  if (args["--help"]) {
-    console.log(doc);
-    Deno.exit(0);
-  }
-
-  const { conns, warnings } = await parse(args["--src"], {
-    maskPassword: args["--mask-password"]
-      ? ((text) => "*".repeat(text.length))
-      : undefined,
-  });
-
-  if (args.inspect) {
-    console.dir({ args, conns, warnings });
-  } else if (args.env) {
-    const prefix = args["--prefix"] ?? "PG_";
-    const exp = args["--no-export"] ? "" : "export ";
-    const prepare = (conn: Connection, varName: string, value: string) =>
+let args: Arguments;
+try {
+  args = docopt(doc) as unknown as Arguments;
+  if (args.inspect) args["--warn-no-descriptors"] = true;
+  args.connMatchers = args["--conn-id"] && args["--conn-id"].length > 0
+    ? (args["--conn-id"].map((re) => new RegExp(re)))
+    : undefined;
+  if (args["psql-fmt"] || args.psql || args.pgcenter) {
+    args.prepareFormat = (conn: Connection) =>
       // deno-fmt-ignore
-      `${exp}${`${prefix}${conn.connDescr.id}_${varName}`.toLocaleUpperCase()}="${value}"`;
-    CONNS:
-    for (const conn of conns) {
-      if (args.connMatchers) {
-        let matched = 0;
-        for (const matcher of args.connMatchers) {
-          if (conn.connDescr.id.match(matcher)) matched++;
-        }
-        if (matched == 0) continue CONNS;
+      `${args["psql-fmt"] ? '' : args.psql ? 'psql' : 'pgcenter top'} -h ${conn.host} -p ${conn.port} -d ${conn.database} -U ${conn.username}`;
+  }
+  if (args.url) {
+    args.prepareFormat = (conn: Connection) =>
+      // deno-fmt-ignore
+      `postgres://${conn.username}:${conn.password}@${conn.host}:${conn.port}/${conn.database}`;
+  }
+  if (args.prepare && args["<js-eval-expr>"]) {
+    // deno-lint-ignore no-unused-vars
+    args.prepareFormat = (conn: Connection) => {
+      return eval(args["<js-eval-expr>"]!);
+    };
+  }
+} catch (e) {
+  console.error(e.message);
+  Deno.exit(1);
+}
+
+if (args["--version"]) {
+  console.log(`pgpass.ts version 1.0`);
+  Deno.exit(0);
+}
+
+if (args["--help"]) {
+  console.log(doc);
+  Deno.exit(0);
+}
+
+const { conns, issues } = await parse(args["--src"], {
+  maskPassword: args["--mask-password"]
+    ? ((text) => "*".repeat(text.length))
+    : undefined,
+});
+
+if (args.inspect) {
+  if (args["--json"]) {
+    console.log(JSON.stringify({ args, conns, issues }));
+  } else {
+    console.dir({ args, conns, issues });
+  }
+} else if (args.test) {
+  // deno-fmt-ignore
+  issues.forEach(i => {console.log(`${i.message} (line ${i.srcLineNumber})`); if (i.error) console.error(i.error)});
+} else if (args.ls) {
+  for (const conn of conns) {
+    // deno-fmt-ignore
+    console.log(`${c.brightYellow(conn.connDescr.id)} ${conn.connDescr.description} ${c.dim(`[${conn.host}:${conn.port} ${conn.username}@${conn.database}]`)}`);
+  }
+} else if (args.env) {
+  const prefix = args["--prefix"] ?? "PG_";
+  const exp = args["--no-export"] ? "" : "export ";
+  const prepare = (conn: Connection, varName: string, value: string) =>
+    // deno-fmt-ignore
+    `${exp}${`${prefix}${conn.connDescr.id}_${varName}`.toLocaleUpperCase()}="${value}"`;
+  CONNS:
+  for (const conn of conns) {
+    if (args.connMatchers) {
+      let matched = 0;
+      for (const matcher of args.connMatchers) {
+        if (conn.connDescr.id.match(matcher)) matched++;
       }
-      console.log(prepare(conn, "HOST", conn.host));
-      console.log(prepare(conn, "PORT", String(conn.port)));
-      console.log(prepare(conn, "DATABASE", conn.database));
-      console.log(prepare(conn, "USER", conn.username));
-      console.log(prepare(conn, "PASSWORD", conn.password));
+      if (matched == 0) continue CONNS;
+    }
+    console.log(prepare(conn, "HOST", conn.host));
+    console.log(prepare(conn, "PORT", String(conn.port)));
+    console.log(prepare(conn, "DATABASE", conn.database));
+    console.log(prepare(conn, "USER", conn.username));
+    console.log(prepare(conn, "PASSWORD", conn.password));
+  }
+} else {
+  if (args.prepareFormat && args.connMatchers) {
+    CONN:
+    for (const conn of conns) {
+      for (const matcher of args.connMatchers) {
+        if (conn.connDescr.id.match(matcher)) {
+          console.log(args.prepareFormat(conn));
+          if (!args["--all"]) break CONN;
+        }
+      }
     }
   } else {
-    if (args.prepareFormat && args.connMatchers) {
-      CONN:
-      for (const conn of conns) {
-        for (const matcher of args.connMatchers) {
-          if (conn.connDescr.id.match(matcher)) {
-            console.log(args.prepareFormat(conn));
-            if (!args["--all"]) break CONN;
-          }
-        }
-      }
-    } else {
-      // if we get to here it means that arguments weren't handled properly
-      console.error("[ERROR] Unable to determine course of action.");
-      console.dir(args);
-    }
+    // if we get to here it means that arguments weren't handled properly
+    console.error("[ERROR] Unable to determine course of action.");
+    console.dir(args);
   }
 }
