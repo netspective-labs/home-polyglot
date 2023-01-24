@@ -8,7 +8,9 @@
 #
 #    psql -h localhost -p 9432 -U <username> <dbname>
 # -----------------------------------------------------------------------------
-# see https://www.postgresql.org/docs/current/libpq-pgpass.html
+# see https://www.postgresql.org/docs/current/libpq-pgpass.html for docs
+# -----------------------------------------------------------------------------
+# run `psqlconnect` at CLI to show a TUI to interactively select db conn
 # -----------------------------------------------------------------------------
 
 # hostname:port:database:username:password
