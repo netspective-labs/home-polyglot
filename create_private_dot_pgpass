@@ -12,17 +12,23 @@
 # -----------------------------------------------------------------------------
 # run `psqlconnect` at CLI to show a TUI to interactively select db conn
 # -----------------------------------------------------------------------------
+# Before each .pgpass line you should include a strict JSONL definition that
+# includes a line like { id: "XYZ", description: "Purpose", boundary: "Network" } 
+# - id: unique ID where "XYZ" will become the environment variable prefix
+# - description: human=friendly elaboration of purpose
+# - boundary: human=friendly name of network or location of the connection
+# -----------------------------------------------------------------------------
 
 # hostname:port:database:username:password
 # 192.168.2.x:5432:database:postgres:sup3rSecure!
 
-# [Network] Human-friendly description of database, followed by psql CLI for copy/paste
+# { id: "MY_SPECIAL_DB", description: "Human-friendly description of database", boundary: "Network" } 
 # > psql -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
 # > usql postgres://pgDB_username:password@192.168.2.24:5432/pgDB_name
 # > pgcenter top -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
 192.168.2.24:5432:pgDB_name:pgDB_username:sup3rSecure!
 
-# [Network] Human-friendly description of database 2
+# { id: "MY_SPECIAL_DB2", description: "Human-friendly description of database 2", boundary: "Network" } 
 # > psql -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
 # > usql "postgres://pgDB2_username:password@192.168.2.24:5033/pgDB2_name?sslmode=disable"
 # > pgcenter top -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
