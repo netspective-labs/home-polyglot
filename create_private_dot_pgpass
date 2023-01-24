@@ -15,9 +15,11 @@
 # 192.168.2.x:5432:database:postgres:sup3rSecure!
 
 # [Network] Human-friendly description of database, followed by psql CLI for copy/paste
-# psql -h 192.168.2.24 -p 5033 -d pgDB_name -U pgDB_username
-192.168.2.24:5033:pgDB_name:pgDB_username:sup3rSecure!
+# psql -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
+# pgcenter top -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
+192.168.2.24:5432:pgDB_name:pgDB_username:sup3rSecure!
 
 # [Network] Human-friendly description of database 2
 # psql -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
+# pgcenter top -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
 192.168.2.24:5033:pgDB2_name:pgDB2_username:sup3rSecure!
