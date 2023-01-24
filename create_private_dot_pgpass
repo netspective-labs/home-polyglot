@@ -10,26 +10,29 @@
 # -----------------------------------------------------------------------------
 # see https://www.postgresql.org/docs/current/libpq-pgpass.html for docs
 # -----------------------------------------------------------------------------
-# run `psqlconnect` at CLI to show a TUI to interactively select db conn
+# * run `$HOME/bin/pgpass.ts --help` to see how to use `pgpass.ts` to process
+#   the contents of this file and emit in multiple formats (env, psql, etc.)
+# * run `psqlconnect` at CLI to show a TUI to interactively select db conn
 # -----------------------------------------------------------------------------
-# Before each .pgpass line you should include a strict JSONL definition that
+# Before each .pgpass line you should include a strict JSON5L definition that
 # includes a line like { id: "XYZ", description: "Purpose", boundary: "Network" } 
-# - id: unique ID where "XYZ" will become the environment variable prefix
+# - id: unique ID where "XYZ" will be used by pgpass.ts to identify connection
 # - description: human=friendly elaboration of purpose
 # - boundary: human=friendly name of network or location of the connection
+#
+# * `pgpass.ts test` will list warning/issues
+# * `pgpass.ts ls conn` will list all connections to copy/paste ID
+# * `pgpass.ts env --conn-id="MY_SPECIAL_DB"` exports conn env vars
+# * `pgpass.ts psql --conn-id="MY_SPECIAL_DB"` emits psql command
+# * `pgpass.ts url --conn-id="MY_SPECIAL_DB"` emits URL
+# * `pgpass.ts inspect` allows detailed inspection in JSON5 format
 # -----------------------------------------------------------------------------
 
 # hostname:port:database:username:password
 # 192.168.2.x:5432:database:postgres:sup3rSecure!
 
-# { id: "MY_SPECIAL_DB", description: "Human-friendly description of database", boundary: "Network" } 
-# > psql -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
-# > usql postgres://pgDB_username:password@192.168.2.24:5432/pgDB_name
-# > pgcenter top -h 192.168.2.24 -p 5432 -d pgDB_name -U pgDB_username
+# { id: "MY_SPECIAL_DB", description: "Human-friendly description of database", boundary: "Network" }
 192.168.2.24:5432:pgDB_name:pgDB_username:sup3rSecure!
 
 # { id: "MY_SPECIAL_DB2", description: "Human-friendly description of database 2", boundary: "Network" } 
-# > psql -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
-# > usql "postgres://pgDB2_username:password@192.168.2.24:5033/pgDB2_name?sslmode=disable"
-# > pgcenter top -h 192.168.2.24 -p 5033 -d pgDB2_name -U pgDB2_username
 192.168.2.24:5033:pgDB2_name:pgDB2_username:sup3rSecure!
