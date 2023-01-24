@@ -1,4 +1,15 @@
+# -----------------------------------------------------------------------------
+# If PostgreSQL is not on the same network, connect to a remote Postgres server
+# using SSH tunnel first. Assuming that Postgres listens on 5432 on remote:
+#
+#    ssh -fNTML 9432:localhost:5432 sshusername@you-server.com
+#
+# Then, just launch psql, connecting to port 9432 at localhost:
+#
+#    psql -h localhost -p 9432 -U <username> <dbname>
+# -----------------------------------------------------------------------------
 # see https://www.postgresql.org/docs/current/libpq-pgpass.html
+# -----------------------------------------------------------------------------
 
 # hostname:port:database:username:password
 # 192.168.2.x:5432:database:postgres:sup3rSecure!
