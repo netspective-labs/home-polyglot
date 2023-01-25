@@ -81,7 +81,7 @@ There are a few chezmoi-managed scripts that are automatically run when necessar
 These and other "managed" scripts show up like this:
 
 ```bash
-$ chezmoi managed | grep "\.sh\$"
+$ chezmoi managed | grep '\.sh$'
 .eget.toml.sh
 install-packages.sh
 ```
