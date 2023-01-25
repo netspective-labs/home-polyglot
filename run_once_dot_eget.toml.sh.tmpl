@@ -1,6 +1,10 @@
 #!/bin/bash
 set -uo pipefail
 
+# We grab the SHA256 for the dependent source, see https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#install-packages-with-scripts
+# whenever dot_eget.toml.tmpl changes, it will provide a new SHA256 forcing this script to run
+# dot_eget.toml.tmpl hash: {{ include "dot_eget.toml.tmpl" | sha256sum }}
+
 # -------------------------------------------------------------------------------------------------
 # ** ALL COMMANDS IN THIS SCRIPT MUST BE IDEMPOTENT **
 # -------------------------------------------------------------------------------------------------
