@@ -71,6 +71,28 @@ chez update
 
 <mark>** DO NOT EDIT ** chezmoi-managed files. To see which files are managed by chezmoi run _chezmoi managed_ and edit those using guidance in the _Contributing_ section below.</mark>
 
+### Running chezmoi-managed scripts manually
+
+There are a few chezmoi-managed scripts that are automatically run when necessary:
+
+* `run_once_dot_eget.toml.sh.tmpl`
+* `run_once_install-packages.sh.tmpl`
+
+These and other "managed" scripts show up like this:
+
+```bash
+$ chezmoi managed | grep "\.sh\$"
+.eget.toml.sh
+install-packages.sh
+```
+
+If you ever need to run them manually, you would use:
+
+```bash
+chezmoi cat .eget.toml.sh | bash
+chezmoi cat install-packages.sh | bash
+```
+
 ### Contributing to `home-polyglot` project
 
 To see which files are _managed_ by `chezmoi` run `chezmoi managed`. Never edit any managed without using `chez edit` or opening the files in the `chezmoi` source directory. Use `chez edit <managed-file> --apply` like `chez edit ~/.config/fish/config.fish --apply` when you want to make quick edits to individual files and apply the changes immediately.
