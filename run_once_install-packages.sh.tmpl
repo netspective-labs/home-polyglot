@@ -70,6 +70,9 @@ rm -f $HOME/bin/deno && ln -s $HOME/.asdf/shims/deno $HOME/bin/deno
 export UDD_VERSION=`curl -fsSL https://api.github.com/repos/hayd/deno-udd/tags | jq '.[0].name' -r`
 DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f -n udd https://deno.land/x/udd@${UDD_VERSION}/main.ts >> $NLH_ASDF_LOG 2>&1
 
+# Netspective Labs Aide `pgpass.ts` parses and allows PostgreSQL connection lookups
+DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f --unstable https://raw.githubusercontent.com/netspective-labs/aide/main/postgres/pgpass.ts >> $NLH_ASDF_LOG 2>&1
+
 curl -fsSL "https://raw.githubusercontent.com/pnikosis/semtag/master/semtag" > ~/bin/git-semtag
 chmod +x ~/bin/git-semtag
 curl -fsSL "https://raw.githubusercontent.com/fboender/multi-git-status/master/mgitstatus" > ~/bin/git-mgitstatus

@@ -22,6 +22,7 @@ echo "adlc `adlc show --version` (lib in $HOME/.local/share/adl)"
 eget --version
 psql --version
 mysql --version
+pgpass --version
 
 # NLH standard is to put all GitHub-downloadable packages in ~/.eget.toml and
 # we store our own extra properties per package so we can auto-generate the
