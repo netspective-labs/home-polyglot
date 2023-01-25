@@ -281,6 +281,10 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 
 # TODO (Roadmap)
 
+## Create CLI completions for `psql` and other commands
+
+Using `netspective-labs/postgres/pgpass.ts` and [mklabs/tabtab](https://github.com/mklabs/tabtab) create a solution similar to [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion). The end solution will show a list of the databases found in the `.pgpass` file to fill out `psql` or other CLI.
+
 ## Evaluate `tea` as a replacement for `asdf` and `direnv` for basic isolation
 
 [tea](https://github.com/teaxyz/cli) claims to be _the next generation, cross‐platform package manager_ replacing `brew`, `winget`, etc. At our convenience (and as `tea` matures) we should evaluate whether it's the right next package manager for us.
