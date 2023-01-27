@@ -10,8 +10,8 @@
 # -----------------------------------------------------------------------------
 # see https://www.postgresql.org/docs/current/libpq-pgpass.html for docs
 # -----------------------------------------------------------------------------
-# * run `$HOME/bin/pgpass.ts --help` to see how to use `pgpass.ts` to process
-#   the contents of this file and emit in multiple formats (env, psql, etc.)
+# * run `$HOME/bin/pgpass --help` to see how to use `pgpass` to process the 
+#   contents of this file and emit in multiple formats (env, psql, etc.)
 # * run `psqlconnect` at CLI to show a TUI to interactively select db conn
 # -----------------------------------------------------------------------------
 # Before each .pgpass line you should include a strict JSON5L definition that
@@ -20,12 +20,12 @@
 # - description: human=friendly elaboration of purpose
 # - boundary: human=friendly name of network or location of the connection
 #
-# * `pgpass.ts test` will list warning/issues
-# * `pgpass.ts ls conn` will list all connections to copy/paste ID
-# * `pgpass.ts env --conn-id="MY_SPECIAL_DB"` exports conn env vars
-# * `pgpass.ts psql --conn-id="MY_SPECIAL_DB"` emits psql command
-# * `pgpass.ts url --conn-id="MY_SPECIAL_DB"` emits URL
-# * `pgpass.ts inspect` allows detailed inspection in JSON5 format
+# * `pgpass test` will list warning/issues
+# * `pgpass ls conn` will list all connections to copy/paste ID
+# * `pgpass env --conn-id="MY_SPECIAL_DB"` exports conn env vars
+# * `pgpass psql --conn-id="MY_SPECIAL_DB"` emits psql command
+# * `pgpass url --conn-id="MY_SPECIAL_DB"` emits URL
+# * `pgpass inspect` allows detailed inspection in JSON5 format
 # -----------------------------------------------------------------------------
 
 # hostname:port:database:username:password
