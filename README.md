@@ -305,7 +305,7 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 
 ## Create CLI completions for `psql` and other commands
 
-Using `netspective-labs/postgres/pgpass.ts` and [mklabs/tabtab](https://github.com/mklabs/tabtab) create a solution similar to [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion). The end solution will show a list of the databases found in the `.pgpass` file to fill out `psql` or other CLI.
+`netspective-labs/postgres/pgpass.ts` has a TODO which suggests [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion)-like CLI completions. Once that's done incorporate the generated completions into `home-polyglot`.
 
 ## Evaluate `tea` as a replacement for `asdf` and `direnv` for basic isolation
 
