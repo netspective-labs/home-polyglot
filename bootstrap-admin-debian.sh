@@ -18,6 +18,9 @@ sudo apt-get -y -qq install postgresql-client default-mysql-client
 # install "build essentials" that are needed to build local binaries (e.g. `asdf` uses it for SQLite package)
 sudo apt-get -y -qq install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libxml2-dev xz-utils tk-dev libxmlsec1-dev libreadline-dev libffi-dev libbz2-dev liblzma-dev llvm
 
+# install common diagramming as code tools
+sudo apt-get -y -qq install graphviz
+
 # install latest osQuery using Debian package in bootstrap instead of chezmoi since it's not idempotent
 OSQ_VERSION=`curl -fsSL https://api.github.com/repos/osquery/osquery/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'`
 OSQ_APT_CACHE=/var/cache/apt/archives
