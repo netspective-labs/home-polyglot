@@ -45,4 +45,6 @@ rm -f ~/bin/git-query
 ln -s ~/bin/gitql ~/bin/git-query
 
 echo "done."
-printf "Inspect ${YELLOW}$NLH_EGET_LOG${NC}: ${RED}`grep error $NLH_EGET_LOG | wc -l`${NC} potential error messages\n"
+
+# find "error" keyword in log file but filter out error.ts, ZodError.ts, etc.
+printf "Inspect ${YELLOW}$NLH_EGET_LOG${NC}: ${RED}`grep -i error $NLH_EGET_LOG | grep -iv "error.*\.ts" | wc -l`${NC} potential error messages\n"
