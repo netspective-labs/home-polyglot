@@ -2,28 +2,13 @@
 
 This is our opinionated [chezmoi](https://www.chezmoi.io/)-, [asdf](https://asdf-vm.com/)- and [Jetpack devbox](https://github.com/jetpack-io/devbox)-based "engineering sandbox home" setup for polyglot software development or any other "creator tasks" that are performed on Linux-like operating systems. 
 
-If you're using Windows 10/11 with WSL2, create a "disposable" **Debian 11+ WSL2** instance using Windows Store. This project treats the WSL2 instance as "disposable" meaning it's for development only and can easily be destroyed and recreated whenever necessary. The cost for creation and destruction for a Engineering Sandbox should be so low that it should be treated almost as a container rather than a VM.
+If you're using Windows 10/11 with WSL2, create a "disposable" **Ubuntu 22.04+ WSL2** instance using Windows Store. This project treats the WSL2 instance as "disposable" meaning it's for development only and can easily be destroyed and recreated whenever necessary. The cost for creation and destruction for a Engineering Sandbox should be so low that it should be treated almost as a container rather than a VM.
 
-If you're using a Debian-based distro you should be able to run this repo in any Debian user account. It will probably work with any Linux-like OS but has only been tested on Debian-based distros (e.g. Debian 11 and Ubuntu 20.04 LTS).
+If you're using a Debian-based distro you should be able to run this repo in any Debian user account. It will probably work with any Linux-like OS but has only been tested on Debian-based distros (e.g. Kali Linux and Ubuntu 20.04 LTS).
 
 ## Linux versions
 
-Use `Debian 11+` or `Ubuntu 20.04+` LTS, both are freely available in the Windows Store for WSL2 or as VMs in Hyper-V.
-
-After you install, double-check your version:
-
-```bash
-sudo apt-get -qq update && sudo apt-get -qq install -y lsb-release && lsb_release -a
-```
-
-You should see something like this:
-
-```bash
-Distributor ID: Debian
-Description:    Debian GNU/Linux 11 (bullseye)
-Release:        11
-Codename:       bullseye
-```
+Use `Ubuntu 22.04+` LTS or Kali Linux, both are freely available in the Windows Store for WSL2 or as VMs in Hyper-V. As of January 27, 2023 Debian 11 was failing installation due to lack of Fish Shell 3.6+ package. 
 
 ## One-time setup
 
