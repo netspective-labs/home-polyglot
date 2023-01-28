@@ -5,7 +5,7 @@ set -o errexit -o nounset -o pipefail
 
 # get add-apt-repository command
 sudo apt-get -qq update
-sudo apt-get -y -qq software-properties-common 
+sudo apt-get -y -qq install software-properties-common 
 
 # we expect the latest Fish shell so be sure to use package archive provided by the fish project not older Debian packages
 sudo add-apt-repository ppa:fish-shell/release-3
