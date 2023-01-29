@@ -19,12 +19,12 @@ $ wsl --install -d kali-linux
 
 ## One-time setup
 
-Bootstrap a Debian-based environment with required utilities:
+Bootstrap our preferred Kali environment with required utilities (be sure to use `bootstrap-admin-debian-typical.sh` if you're not using Kali):
 
 ```bash
 cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
    sudo apt-get -qq update && sudo apt-get -qq install -y lsb-release && \
-   curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-debian-typical.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-kali.sh | bash
 ```
 
 Once the admin (`sudo`) part of the boostrap is complete, continue with non-admin:
