@@ -10,6 +10,13 @@ If you're using a Debian-based distro you should be able to run this repo in any
 
 Use `Kali Linux` *Rolling version* as our preferred distribution (see [kali-linux for WSL](https://apps.microsoft.com/store/detail/kali-linux/9PKR34TNCV07), freely available in the Windows Store for WSL2) or as VMs in Hyper-V. Any Debian-based distro which supports Fish Shell 3.6+ should also work, including Ubuntu 20.04 LTS, Ubuntu 22.04 LTS, Debian 11+ with Fish upgrades, etc.
 
+If you're using Windows WSL, you can use these commands to install/uninstall our preferred distro:
+
+```powershell
+$ wsl --unregister kali-linux
+$ wsl --install -d kali-linux
+```
+
 ## One-time setup
 
 Bootstrap a Debian-based environment with required utilities:
