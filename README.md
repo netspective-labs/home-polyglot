@@ -23,7 +23,7 @@ Bootstrap a Debian-based environment with required utilities:
 
 ```bash
 cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
-    curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-debian.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-debian-typical.sh | bash
 ```
 
 Once the admin (`sudo`) part of the boostrap is complete, continue with non-admin:
