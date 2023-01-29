@@ -2,9 +2,7 @@
 
 This is our opinionated [chezmoi](https://www.chezmoi.io/)- and [asdf](https://asdf-vm.com/)-based "engineering sandbox home" setup for polyglot software development or any other "creator tasks" that are performed on Linux-like operating systems. 
 
-If you're using Windows 10/11 with WSL2, create a "disposable" **Ubuntu 22.04+ WSL2** instance using Windows Store. This project treats the WSL2 instance as "disposable" meaning it's for development only and can easily be destroyed and recreated whenever necessary. The cost for creation and destruction for a Engineering Sandbox should be so low that it should be treated almost as a container rather than a VM.
-
-If you're using a Debian-based distro you should be able to run this repo in any Debian user account. It will probably work with any Linux-like OS but has only been tested on Debian-based distros (e.g. Kali Linux and Ubuntu 20.04 LTS).
+If you're using Windows 10/11 with WSL2, create a "disposable" Linux instance using Powershell CLI or Windows Store. This project treats the WSL2 instance as "disposable" meaning it's for development only and can easily be destroyed and recreated whenever necessary. The cost for creation and destruction for a Engineering Sandbox should be so low that it should be treated almost as a container rather than a VM. This means everything done in a sandbox should be scripted, with the scripts stored in GitHub for easy re-running through Fish shell or `chezmoi`.
 
 ## Linux versions
 
@@ -16,6 +14,8 @@ If you're using Windows WSL, you can use these commands to install/uninstall our
 $ wsl --unregister kali-linux
 $ wsl --install -d kali-linux
 ```
+
+If you're using a Debian-based distro you should be able to run this repo in any Debian user account. It will probably work with any Linux-like OS but has only been tested on Debian-based distros (e.g. Kali Linux and Ubuntu 20.04 LTS).
 
 ## One-time setup
 
