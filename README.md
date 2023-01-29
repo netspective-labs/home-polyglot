@@ -19,7 +19,7 @@ If you're using a Debian-based distro you should be able to run this repo in any
 
 ## One-time setup
 
-Bootstrap our preferred Kali environment with required utilities (be sure to use `bootstrap-admin-debian-typical.sh` if you're not using Kali):
+Bootstrap our preferred Kali environment with required utilities (be sure to use `bootstrap-admin-ubuntu.sh` or `bootstrap-admin-debian-typical.sh` if you're not using Kali):
 
 ```bash
 cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
