@@ -26,6 +26,12 @@ cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
     curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-debian.sh | bash
 ```
 
+Once the admin (`sudo`) part of the boostrap is complete, continue with non-admin:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-common.sh | bash
+```
+
 We use [chezmoi](https://www.chezmoi.io/) with templates to manage our dotfiles across multiple diverse machines, securely. The `bootstrap-*` script has already created the `chezmoi` config file which you should personalize _before installing_ `chezmoi`. See [chezmoi.toml Example](dot_config/chezmoi/chezmoi.toml.example) to help understand the variables that can be set and used across chezmoi templates.
 
 ```bash
