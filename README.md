@@ -1,6 +1,6 @@
 # Netspective Labs Polyglot Home Setup
 
-This is our opinionated [chezmoi](https://www.chezmoi.io/)-, [asdf](https://asdf-vm.com/)- and [Jetpack devbox](https://github.com/jetpack-io/devbox)-based "engineering sandbox home" setup for polyglot software development or any other "creator tasks" that are performed on Linux-like operating systems. 
+This is our opinionated [chezmoi](https://www.chezmoi.io/)- and [asdf](https://asdf-vm.com/)-based "engineering sandbox home" setup for polyglot software development or any other "creator tasks" that are performed on Linux-like operating systems. 
 
 If you're using Windows 10/11 with WSL2, create a "disposable" **Ubuntu 22.04+ WSL2** instance using Windows Store. This project treats the WSL2 instance as "disposable" meaning it's for development only and can easily be destroyed and recreated whenever necessary. The cost for creation and destruction for a Engineering Sandbox should be so low that it should be treated almost as a container rather than a VM.
 
@@ -8,11 +8,11 @@ If you're using a Debian-based distro you should be able to run this repo in any
 
 ## Linux versions
 
-Use `Ubuntu 22.04+` LTS or Kali Linux, both are freely available in the Windows Store for WSL2 or as VMs in Hyper-V. As of January 27, 2023 Debian 11 was failing installation due to lack of Fish Shell 3.6+ package. 
+Use `Kali Linux` *Rolling version* as our preferred distribution (see [kali-linux for WSL](https://apps.microsoft.com/store/detail/kali-linux/9PKR34TNCV07), freely available in the Windows Store for WSL2) or as VMs in Hyper-V. Any Debian-based distro which supports Fish Shell 3.6+ should also work, including Ubuntu 20.04 LTS, Ubuntu 22.04 LTS, Debian 11+ with Fish upgrades, etc.
 
 ## One-time setup
 
-Bootstrap a Debian environment with required utilities:
+Bootstrap a Debian-based environment with required utilities:
 
 ```bash
 cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
@@ -38,7 +38,7 @@ chsh -s /usr/bin/fish
 exit
 ```
 
-At this point the default configuration should be complete and you can start using your NLH devbox.
+At this point the default configuration should be complete and you can start using your NLH workspaces.
 
 ## Secrets Management
 
@@ -182,12 +182,6 @@ This might better than trying to give installation instructions in `README.md` a
 
 Basically in each of our Git repos we can give `.tool-versions` and then each project user can just run `asdf install`.
 
-### Use devbox for reproducible isolation
-
-We use [devbox](https://jetpack.io/devbox) as our nix-based project-specific package manager to install languages and utilities which require more complex package management than what `asdf` can handle. `devbox` offers more flexibility and deterministic reproducbility of dev environments which can then be translated to 
-
-TODO
-
 ### Conventions
 
 * We use `$HOME/bin` for binaries whenever possible instead globally installing them using `sudo`.
@@ -199,7 +193,7 @@ Run `nlh-doctor` to get list of useful packages and versions included. Some high
 
 * We use [fish shell](https://fishshell.com/) for our CLI.
 * We use `git` and `git-extras` and define many `git-*` individual scripts (e.g. `mGit`) because we're a GitOps shop.
-* We use [asdf](https://asdf-vm.com/) for basic tools isolation (when `devbox` might be overkill).
+* We use [asdf](https://asdf-vm.com/) for basic tools isolation.
 * We use [deno](https://deno.land) for custom scripting and `dax` command runner to execute tasks (available in `$HOME/bin`). We favor `deno` over `make` for new packages but `make` is still a great tool for legacy requirements. If we create complex scripts that need to perform shell manipulation, `deno` with [dax](https://github.com/dsherret/dax) is preferred over making system calls in `deno`.
 * We use [pass](https://www.passwordstore.org/) the standard unix password manager for managing secrets that should not be in plaintext.
 * We use `osQuery`, `cnquery`, `steampipe`, et. al. system and endpoint observabilty tools for SOC2 and other compliance requirements
@@ -272,9 +266,7 @@ git push
 
 ## Important per-project and per-directory configuration management tools
 
-We use `devbox` to manage almost all languages and utilities so that they can be easily installed and, more importantly, support multiple versions simultaneously. `devbox` uses `nix`, which has [centrally managed plugins](https://search.nixos.org/packages) for many languages and runtimes. 
-
-In addition to `devbox` which supports a flexible version configuration strategy for languages and runtimes, we use `direnv` to encourage usage of environment variables with per-directory flexibility. Per their documentation:
+We use `direnv` to encourage usage of environment variables with per-directory flexibility. Per their documentation:
 
 > direnv is an extension for your shell. It augments existing shells with a new feature that can load and unload environment variables depending on the current directory.
 
@@ -296,7 +288,11 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 
 [tea](https://github.com/teaxyz/cli) claims to be _the next generation, cross‐platform package manager_ replacing `brew`, `winget`, etc. At our convenience (and as `tea` matures) we should evaluate whether it's the right next package manager for us.
 
-## Install nix-shell as part of bootstrap
+## Evaluate Jetpack devbox if we don't end up using `tea` or `asdf` is not enough
+
+We should consider [devbox](https://jetpack.io/devbox) as our nix-based project-specific package manager to install languages and utilities which require more complex package management than what `asdf` can handle. [jetpack.io devbox](https://www.jetpack.io/devbox) should be evaluated after `tea` because it uses `nix` and supports generating IaC artifacts like Dockerfile.
+
+### Install nix-shell as part of bootstrap
 
 As we start to use more `nix` capabilities, consider installing `nix-shell` as part of `bootstrap-admin-*.sh`. Since `devbox` and other home managers depend on Nix anyway, it probably makes sense to manage `nix` core separately from `devbox`, et. al.
 

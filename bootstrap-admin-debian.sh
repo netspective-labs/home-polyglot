@@ -25,18 +25,17 @@ sudo apt-get -y -qq install build-essential zlib1g-dev libncurses5-dev libgdbm-d
 # install common diagramming as code tools
 sudo apt-get -y -qq install graphviz
 
-# install latest osQuery using Debian package in bootstrap instead of chezmoi since it's not idempotent
+# install git-extras in bootstrap instead of chezmoi since sudo is required for global setup;
+# right now chezmoi `run_once_install-packages.sh.tmpl` doesn't require sudo but if it does later,
+# move `git-extras` install into `run_once_install-packages.sh.tmpl` for convenience
+curl -sSL https://raw.githubusercontent.com/tj/git-extras/master/install.sh | sudo bash /dev/stdin
+
+# install latest osQuery using Debian package in bootstrap instead of chezmoi since it's Debian-specific
 OSQ_VERSION=`curl -fsSL https://api.github.com/repos/osquery/osquery/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'`
 OSQ_APT_CACHE=/var/cache/apt/archives
 OSQ_DEB_FILE=osquery_${OSQ_VERSION}-1.linux_amd64.deb
 sudo curl -fsSL -o $OSQ_APT_CACHE/$OSQ_DEB_FILE https://pkg.osquery.io/deb/$OSQ_DEB_FILE
 sudo dpkg -i $OSQ_APT_CACHE/$OSQ_DEB_FILE
-
-# install git-extras in bootstrap instead of chezmoi since sudo is required for global setup
-curl -fsSL https://git.io/git-extras-setup | sudo bash /dev/stdin
-
-# install Jetpack devbox in bootstrap instead of chezmoi since sudo is required for global setup
-curl -fsSL https://get.jetpack.io/devbox | FORCE=1 bash
 
 # install latest asdf and direnv integration in bootstrap instead of chezmoi since installation is not idempotent
 ASDF_DIR=$HOME/.asdf
@@ -64,7 +63,6 @@ echo "**   - curl, git, gitextras, jq, pass, unzip, bzip2, tree, and make       
 echo "**   - osquery (for endpoint observability)                                **"
 echo "**   - asdf (version manager for languages, runtimes, etc.)                **"
 echo "**   - direnv (per-directory environment variables loader, via asdf)       **"
-echo "**   - devbox (nix-based predictable development environments)             **"
 echo "** ----------------------------------------------------------------------- **"
 echo "** Continue installation by editing chezmoi config:                        **"
 echo '**   vi ~/.config/chezmoi/chezmoi.toml                                     **'
