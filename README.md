@@ -23,7 +23,7 @@ Bootstrap a Debian-based environment with required utilities:
 
 ```bash
 cd $HOME && sudo apt-get -qq update && sudo apt-get install curl -y -qq && \
-   sudo apt-get -qq update && sudo apt-get -qq install -y lsb-release \
+   sudo apt-get -qq update && sudo apt-get -qq install -y lsb-release && \
    curl -fsSL https://raw.githubusercontent.com/netspective-labs/home-polyglot/master/bootstrap-admin-debian-typical.sh | bash
 ```
 
