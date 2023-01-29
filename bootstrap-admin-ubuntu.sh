@@ -5,6 +5,15 @@ set -o errexit -o nounset -o pipefail
 # Optimized Ubuntu admin (`sudo`) boostrap.
 #-----------------------------------------------------------------------------
 
+export LINUXD=`lsb_release -a | head -n 1 | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
+if [ "$LINUXD" != "kali" ]; then
+    echo "** ERROR **: This scripts only Kali Linux distributions."
+    lsb_release -a
+    exit -1
+else
+     echo "Proceeding with installation of acceptable $LINUXD distribution."
+fi
+
 # we expect the latest Fish shell so be sure to use package archive provided by the fish project not older Debian packages;
 sudo add-apt-repository ppa:fish-shell/release-3
 

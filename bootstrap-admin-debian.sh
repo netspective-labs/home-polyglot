@@ -7,6 +7,16 @@ set -o errexit -o nounset -o pipefail
 # should use `bootstrap-admin-kali.sh`.
 #-----------------------------------------------------------------------------
 
+# TODO: check and exit if not proper distribution
+# export LINUXD=`lsb_release -a | head -n 1 | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
+# if [ "$LINUXD" != "kali" ]; then
+#     echo "** ERROR **: This scripts only Kali Linux distributions."
+#     lsb_release -a
+#     exit -1
+# else
+#      echo "Proceeding with installation of acceptable $LINUXD distribution."
+# fi
+
 # For older Debian distros that don't have it, get add-apt-repository command (Ubuntu has it, Debian doesn't)
 sudo apt-get -qq update
 sudo apt-get -y -qq install software-properties-common 
