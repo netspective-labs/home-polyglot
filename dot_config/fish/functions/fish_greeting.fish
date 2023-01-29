@@ -10,7 +10,7 @@ function fish_greeting
 
         # https://www.chezmoi.io/user-guide/daily-operations/#pull-the-latest-changes-from-your-repo-and-see-what-would-change-without-actually-applying-the-changes
         set_color --dim
-        chezmoi git pull -- --autostash --rebase && chezmoi diff
+        chezmoi git pull -- --autostash --rebase && chez status
         set_color normal
     end
 end
