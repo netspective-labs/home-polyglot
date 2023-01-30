@@ -7,29 +7,32 @@ set -o errexit -o nounset -o pipefail
 # should use `bootstrap-admin-kali.sh`.
 #-----------------------------------------------------------------------------
 
-# TODO: check and exit if not proper distribution
-# export LINUXD=`lsb_release -a | head -n 1 | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
-# if [ "$LINUXD" != "kali" ]; then
-#     echo "** ERROR **: This scripts only Kali Linux distributions."
-#     lsb_release -a
-#     exit -1
-# else
-#      echo "Proceeding with installation of acceptable $LINUXD distribution."
-# fi
+# check and exit if not proper distribution
+export LINUXD=`lsb_release -a | head -n 1 | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
+if [ "$LINUXD" != "debian" ]; then
+    echo "** ERROR **: This scripts only Debian Linux distributions."
+    lsb_release -a
+    exit -1
+else
+     echo "Proceeding with installation of acceptable $LINUXD distribution."
+fi
 
 # For older Debian distros that don't have it, get add-apt-repository command (Ubuntu has it, Debian doesn't)
 sudo apt-get -qq update
-sudo apt-get -y -qq install software-properties-common 
+sudo apt-get -y -qq install software-properties-common wget jq gpg
 
 # we expect the latest Fish shell so be sure to use package archive provided by the fish project not older Debian packages;
-# Debian and Ubuntu have older packages, Kali Rolling usually has latest
-sudo add-apt-repository ppa:fish-shell/release-3
+# Debian and Ubuntu have older packages, openSUSE repository supports Debian packages
+DEBIAN_VERSION_MAIN=`grep VERSION_ID /etc/os-release | awk -F= '{print $2}' | sed -e 's/^"//' -e 's/"$//'`
+FISH_VERSION_MAIN=`curl -s https://api.github.com/repos/fish-shell/fish-shell/releases/latest | jq -r .tag_name | cut -c1`
+echo "deb http://download.opensuse.org/repositories/shells:/fish:/release:/${FISH_VERSION_MAIN}/Debian_${DEBIAN_VERSION_MAIN}/ /" | sudo tee /etc/apt/sources.list.d/shells:fish:release:3.list
+curl -fsSL https://download.opensuse.org/repositories/shells:fish:release:${FISH_VERSION_MAIN}/Debian_${DEBIAN_VERSION_MAIN}/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_fish_release_3.gpg > /dev/null
 
 # get the latest packages meta data
 sudo apt-get -qq update
 
 # install true "essentials" that will be universally applicable
-sudo apt-get -y -qq install fish curl git jq pass unzip bzip2 tree make bsdmainutils time gettext-base wget 
+sudo apt-get -y -qq install fish curl git pass unzip bzip2 tree make bsdmainutils time gettext-base
 
 # install database clients for accessing remote databases
 sudo apt-get -y -qq install postgresql-client default-mysql-client
