@@ -6,8 +6,8 @@ set -o errexit -o nounset -o pipefail
 #-----------------------------------------------------------------------------
 
 export LINUXD=`lsb_release -a | head -n 1 | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
-if [ "$LINUXD" != "kali" ]; then
-    echo "** ERROR **: This scripts only Kali Linux distributions."
+if [ "$LINUXD" != "ubuntu" ]; then
+    echo "** ERROR **: This scripts only Ubuntu Linux distributions."
     lsb_release -a
     exit -1
 else
