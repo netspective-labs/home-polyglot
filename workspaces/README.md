@@ -63,6 +63,15 @@ cd $HOME/workspaces
 
 The file `ws-ensure.ts`  should be considered "personal" (machine-specific and unmanaged by `chezmoi`). Whenever you want to grab a new managed repo from GitHub, GitLab, etc. just edit `$HOME/workspaces/ws-ensure.ts` and follow the examples. You can also ask your colleagues for their `ws-ensure.ts` file examples as well. 
 
+## Imperatively cloning individual mGit repo(s)
+
+If you'd like to clone a specific repo using mGit structure, without using `ws-ensure`, use `deno eval`, supplying the repo in `m.workspaceRepo('github.com/shah/icalytics')`:
+
+```bash
+cd $HOME/workspaces
+deno eval --ext=ts "import * as m from '../lib/mgit.ts'; await m.ensureRepo(await m.workspaceRepo('github.com/shah/icalytics'));"
+```
+
 ## Navigating managed Git workspaces
 
 The `wscd` function is available. As you clone repos and move around inside `$HOME/workspaces` you may want to easily come back to the top of the workspaces root. You can do that using the `wscd` function. For example:
