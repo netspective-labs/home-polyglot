@@ -65,7 +65,14 @@ The file `ws-ensure.ts`  should be considered "personal" (machine-specific and u
 
 ## Imperatively cloning individual mGit repo(s)
 
-If you'd like to clone a specific repo using mGit structure, without using `ws-ensure`, use `deno eval`, supplying the repo in `m.workspaceRepo('github.com/shah/icalytics')`:
+If you'd like to clone a specific repo using mGit structure, without using `ws-ensure`:
+
+```fish
+cd $HOME/workspaces
+ws-mgit-ensure github.com/shah/icalytics
+```
+
+The `ws-mgit-ensure` command simply uses `deno eval`, supplying the repo in `m.workspaceRepo('github.com/shah/icalytics')` and is equivalent to:
 
 ```bash
 cd $HOME/workspaces
