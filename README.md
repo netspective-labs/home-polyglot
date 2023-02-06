@@ -296,6 +296,17 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 
 # TODO (Roadmap)
 
+## Add higher-level scripting language support
+
+We prefer Deno for scripts (rather than `bash` or `fish`) because of portability and that Deno scripts are just Typescript. However, we can and should support other languages too:
+
+- [ ] [rust-script](https://rust-script.org/) can run Rust files and expressions as scripts without any setup or compilation step
+- [ ] [bitfield/script](https://github.com/bitfield/script) makes it easy to write shell-like scripts in Go - this can be helpful if we need to customize things like PocketBase.io.
+
+## Consider PocketBase.io as built-in BaaS
+
+Instead of using `simple-http-server` switch to PocketBase.io in case we need a built-in BaaS in home-polyglot.
+
 ## Create CLI completions for `psql` and other commands
 
 `netspective-labs/postgres/pgpass.ts` has a TODO which suggests [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion)-like CLI completions. Once that's done incorporate the generated completions into `home-polyglot`.
