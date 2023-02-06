@@ -44,6 +44,9 @@ mv eget ~/bin
 rm -f ~/bin/git-query
 ln -s ~/bin/gitql ~/bin/git-query
 
+# setup fish CLI command completions for `gopass` 
+~/bin/gopass completion fish > ~/.config/fish/completions/gopass.fish
+
 echo "done."
 
 # find "error" keyword in log file but filter out error.ts, ZodError.ts, etc.
