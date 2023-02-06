@@ -26,6 +26,12 @@
 # the NLH documentation system uses it like this:
 # fa-jq '.[] | select(.nlh_repo_url != null) | { package: .nlh_repo_url, description: .nlh_description, doctorCmd: .nlh_doctor_cmd } ' ~/.eget.toml -o json | jq
 
+["gopasspw/gopass"]
+  asset_filters = [ "linux-amd64.tar.gz", "^.sbom" ]
+  nlh_repo_url = "https://github.com/gopasspw/gopass"
+  nlh_description = "Standard unix password manager for teams"
+  nlh_doctor_cmd = "gopass --version"
+
 ["https://github.com/jzelinskie/faq/releases/download/0.0.7/faq-linux-amd64"]
   target = "~/bin/fa-jq"
   nlh_repo_url = "https://github.com/jzelinskie/faq"
