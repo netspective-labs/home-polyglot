@@ -1,3 +1,11 @@
 #!/bin/bash
 set -uo pipefail
-gopass completion fish > ~/.config/fish/completions/gopass.fish
+
+# this script is designed to run after each `chezmoi apply`; the `gopass`
+# command and other commands should already have been installed by 
+# run_once_dot_eget.toml.sh.tmpl because chezmoi runs scripts in alpha
+# order.
+
+# don't assume path is set, use deliberate locations becuase during initial
+# setup the binaries will be in bin but sell may not be setup
+$HOME/bin/gopass completion fish > ~/.config/fish/completions/gopass.fish
