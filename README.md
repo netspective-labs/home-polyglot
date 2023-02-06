@@ -296,6 +296,10 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 
 # TODO (Roadmap)
 
+## Implement `gopass` and `summon` integration to remove passwords from .envrc
+
+Instead of putting passwords directly into `.envrc` and other files, use `gopass` and `summon` (both installed as part of our default packages).
+
 ## Add higher-level scripting language support
 
 We prefer Deno for scripts (rather than `bash` or `fish`) because of portability and that Deno scripts are just Typescript. However, we can and should support other languages too:
