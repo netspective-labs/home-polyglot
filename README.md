@@ -301,11 +301,14 @@ There are some [direnv YouTube videos](https://www.youtube.com/results?search_qu
 We prefer Deno for scripts (rather than `bash` or `fish`) because of portability and that Deno scripts are just Typescript. However, we can and should support other languages too:
 
 - [ ] [rust-script](https://rust-script.org/) can run Rust files and expressions as scripts without any setup or compilation step
-- [ ] [bitfield/script](https://github.com/bitfield/script) makes it easy to write shell-like scripts in Go - this can be helpful if we need to customize things like PocketBase.io.
+- [ ] [erning/gorun](https://github.com/erning/gorun) enables "shebang" in the source code of a Go program to run it
+- [ ] [bitfield/script](https://github.com/bitfield/script) makes it easy to write shell-like scripts in Go - this can be helpful if we need to customize things like PocketBase.io
+
+The only downside to using Rust, Go, etc. as scripting languages is that we need to have compilers available.
 
 ## Consider PocketBase.io as built-in BaaS
 
-Instead of using `simple-http-server` switch to PocketBase.io in case we need a built-in BaaS in home-polyglot.
+Instead of using `simple-http-server` switch to [PocketBase.io](https://PocketBase.io) in case we need a built-in BaaS in home-polyglot. 
 
 ## Create CLI completions for `psql` and other commands
 
