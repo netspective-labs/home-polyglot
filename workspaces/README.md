@@ -123,3 +123,7 @@ git-semtag final -v v0.5.0
 # or 'git-semtag final' without version to auto-compute semver based on heuristics
 git push
 ```
+
+## Making content updates across multiple GitHub repos
+
+[git-xargs](https://github.com/gruntwork-io/git-xargs) is a command-line tool (CLI) for making updates across multiple Github repositories with a single command. `git-xargs` is not installed by default but if you need it, you can install it yourself for one-off use or let our team know and we'll have it installed as a standard `home-polyglot` package.
