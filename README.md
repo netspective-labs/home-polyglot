@@ -85,14 +85,14 @@ $ chezmoi managed | grep '\.sh$'
 install-packages.sh
 ```
 
-If you ever need to run them manually (such as when chezmoi or NL Aide libs are changed), you would use:
+If you ever need to run them manually (such as when chezmoi or NL Aide libs are changed or an error occurs and you need to force the execution), you would use:
 
 ```bash
 $ chezmoi state delete-bucket --bucket=scriptState
 $ chezmoi apply
 ```
 
-See [Clear the state of run_once_ scripts](https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#clear-the-state-of-run_once_-scripts) in `chezmoi` documentation for more information.
+See [Clear the state of run_once_ scripts](https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#clear-the-state-of-run_once_-scripts) in `chezmoi` documentation for more information about how to force execution of scripts instead of using memoized state.
 
 ### Contributing to `home-polyglot` project
 
