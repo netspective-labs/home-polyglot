@@ -1,0 +1,13 @@
+# This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
+# To modify, use `chezmoi edit ~/.config/fish/conf.d/npm.fish --apply`. 
+
+{{- if (index . "github") }}
+{{- if (index . "github" "user") }}
+{{- if (index . "github" "user" "prime" "pat") }}
+export NPM_AUTH_TOKEN=TOKEN_VALUE="{{ .github.user.prime.pat }}"
+{{- else}}
+# '.github.user.prime.pat' required in chezmoi.toml if this is desired:
+#export NPM_AUTH_TOKEN=TOKEN_VALUE="..."
+{{- end}}
+{{- end}}
+{{- end}}
