@@ -4,10 +4,10 @@
 {{- if (index . "github") }}
 {{- if (index . "github" "user") }}
 {{- if (index . "github" "user" "prime" "pat") }}
-export NPM_AUTH_TOKEN=TOKEN_VALUE="{{ .github.user.prime.pat }}"
+export NPM_AUTH_TOKEN="{{ .github.user.prime.pat }}"
 {{- else}}
 # '.github.user.prime.pat' required in chezmoi.toml if this is desired:
-#export NPM_AUTH_TOKEN=TOKEN_VALUE="..."
+#export NPM_AUTH_TOKEN="..."
 {{- end}}
 {{- end}}
 {{- end}}
