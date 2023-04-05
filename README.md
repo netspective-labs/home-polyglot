@@ -242,6 +242,7 @@ asdf-setup-plugin-global gitui https://github.com/looztra/asdf-gitui
 * `IS_NLH` and `IS_NLH_WSL` (defined in `dot_config/fish/conf.d/netspective-labs-home.fish`)
 * `DENO_INSTALL` (defined in `dot_config/fish/conf.d/deno.fish`)
 * `MANAGED_GIT_WORKSPACES_HOME` (defined in `direnv` `.envrc` for `mGit` workspaces)
+* `NPM_AUTH_TOKEN` set to GitHub token if supplied in `.config/chezmoi/chezmoi.toml` (defined in `dot_config/fish/conf.d/npm.fish.tmpl`)
 
 ### PATH
 
