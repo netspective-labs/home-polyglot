@@ -13,3 +13,13 @@ oh-my-posh init fish --config ~/.config/oh-my-posh/netspective-typical.omp.json 
 source ~/.asdf/asdf.fish
 direnv hook fish | source
 zoxide init fish | source
+
+# Start SSH agent and add keys if ~/.ssh/id_rsa exists
+if status --is-login
+    if test -f ~/.ssh/id_rsa
+        eval (ssh-agent -c) > /dev/null
+        if not ssh-add -l > /dev/null
+            ssh-add ~/.ssh/id_rsa > /dev/null 2>&1
+        end
+    end
+end
