@@ -317,7 +317,7 @@ Instead of using `simple-http-server` switch to [PocketBase.io](https://PocketBa
 
 ## Create CLI completions for `psql` and other commands
 
-`netspective-labs/postgres/pgpass.ts` has a TODO which suggests [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion)-like CLI completions. Once that's done incorporate the generated completions into `home-polyglot`.
+`netspective-labs/sql-aide/lib/postgres/pgpass.ts` has a TODO which suggests [martin1keogh/zsh_pgpass_completion](https://github.com/martin1keogh/zsh_pgpass_completion)-like CLI completions. Once that's done incorporate the generated completions into `home-polyglot`.
 
 ## Evaluate `tea` as a replacement for `asdf` and `direnv` for basic isolation
 
