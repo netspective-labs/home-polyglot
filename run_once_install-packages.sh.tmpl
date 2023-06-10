@@ -72,7 +72,7 @@ DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f -n udd https://deno.land/x/udd@
 
 # Netspective Labs SQLa `pgpass.ts` parses and allows PostgreSQL connection lookups
 export SQLa_VERSION=`curl -fsSL https://api.github.com/repos/netspective-labs/sql-aide/tags | jq '.[0].name' -r`
-DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f --unstable https://raw.githubusercontent.com/netspective-labs/sql-aide/${SQLa_VERSION}/lib/postgres/pgpass.ts >> $NLH_ASDF_LOG 2>&1
+DENO_INSTALL_ROOT=~ $HOME/bin/deno install -A -f --unstable https://raw.githubusercontent.com/netspective-labs/sql-aide/${SQLa_VERSION}/lib/postgres/pgpass/pgpass.ts >> $NLH_ASDF_LOG 2>&1
 
 curl -fsSL "https://raw.githubusercontent.com/pnikosis/semtag/master/semtag" > ~/bin/git-semtag
 chmod +x ~/bin/git-semtag
