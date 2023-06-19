@@ -1,5 +1,5 @@
 # This file is managed by chezmoi in {{ .chezmoi.sourceFile }}. DO NOT EDIT directly.
-# To modify, use `chezmoi edit ~/.eget.toml --apply`. 
+# To modify, use `chezmoi edit ~/.eget.toml --apply`.
 
 # see https://github.com/zyedidia/eget#configuration
 [global]
@@ -8,12 +8,12 @@
 {{- if (index . "github" "user") }}
 {{- if (index . "github" "user" "prime" "pat") }}
   github_token = "{{ .github.user.prime.pat }}"
-{{- else}}	
+{{- else}}
   # '.github.user.prime.pat' required in chezmoi.toml if this is desired:
   # github_token = "ghp_1234567890"
 {{- end}}
 {{- end}}
-{{- end}}  
+{{- end}}
   quiet = false
   show_hash = false
   upgrade_only = false
@@ -159,3 +159,9 @@
   nlh_repo_url = "https://github.com/Doctave/doctave"
   nlh_description = "A batteries-included developer documentation site generator"
   nlh_doctor_cmd = "doctave --version"
+
+["openobserve/openobserve"]
+  asset_filters = [ "linux-amd64-musl" ]
+  nlh_repo_url = "https://github.com/openobserve/openobserve"
+  nlh_description = "Elasticsearch/Splunk/Datadog alternative"
+  nlh_doctor_cmd = "openobserve --version"
