@@ -165,3 +165,9 @@
   nlh_repo_url = "https://github.com/openobserve/openobserve"
   nlh_description = "Elasticsearch/Splunk/Datadog alternative"
   nlh_doctor_cmd = "openobserve --version"
+
+["prometheus/prometheus"]
+  asset_filters = [ "linux-amd64" ]
+  nlh_repo_url = "https://github.com/prometheus/prometheus"
+  nlh_description = "Ingest Metrics using prometheus"
+  nlh_doctor_cmd = "prometheus --version"
