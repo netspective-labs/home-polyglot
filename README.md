@@ -85,7 +85,8 @@ $ chezmoi managed | grep '\.sh$'
 install-packages.sh
 ```
 
-If you ever need to run them manually (such as when chezmoi or NL Aide libs are changed or an error occurs and you need to force the execution), you would use:
+#### Force the chezmoi-managed script execution to Install / Update 
+- If you ever need to run them manually (such as when chezmoi or NL Aide libs are changed or an error occurs and you need to force the execution), as well as forcefully install the utilitize mentioned in this script to latest version. you would use:
 
 ```bash
 $ chezmoi state delete-bucket --bucket=scriptState
