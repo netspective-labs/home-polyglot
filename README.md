@@ -95,6 +95,16 @@ $ chezmoi apply
 
 See [Clear the state of run_once_ scripts](https://www.chezmoi.io/user-guide/use-scripts-to-perform-actions/#clear-the-state-of-run_once_-scripts) in `chezmoi` documentation for more information about how to force execution of scripts instead of using memoized state.
 
+### Starting Prometheus
+
+To start Prometheus, prepare the [prometheus.yml](https://prometheus.io/docs/prometheus/latest/getting_started/#configuring-prometheus-to-monitor-itself) configuration file at any directory of your choice. Change to the directory containing the Prometheus configuration file and run:
+
+```bash
+# By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
+prometheus --config.file=prometheus.yml
+```
+Prometheus should start up. You should also be able to browse to a status page about itself at localhost:9090
+
 ### Contributing to `home-polyglot` project
 
 To see which files are _managed_ by `chezmoi` run `chezmoi managed`. Never edit any managed without using `chez edit` or opening the files in the `chezmoi` source directory. Use `chez edit <managed-file> --apply` like `chez edit ~/.config/fish/config.fish --apply` when you want to make quick edits to individual files and apply the changes immediately.
