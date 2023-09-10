@@ -2,7 +2,7 @@
 # To modify, use `chezmoi edit ~/.config/fish/conf.d/deno.fish --apply`. 
 
 # Deno is installed via chezmoi one-time install
-export DENO_INSTALL="/home/snshah/.deno"
+export DENO_INSTALL="$HOME/.deno"
 fish_add_path "$DENO_INSTALL/bin"
 
 # Destination for all 'deno install X' "binaries". Deno appends "/bin".
