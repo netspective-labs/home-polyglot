@@ -12,12 +12,12 @@
 export MODULAR_AUTH="{{ .modular_com.env.MODULAR_AUTH }}"
 export MODULAR_HOME="$HOME/.modular"
 fish_add_path "$MODULAR_HOME/pkg/packages.modular.com_mojo/bin"
+{{-         else}}
+# '.modular_com.env.MODULAR_AUTH' not found in chezmoi.toml (see dot_config/chezmoi/chezmoi.toml.example)
 {{-         end}}
+{{-     else}}
+# '.modular_com.env' not found in chezmoi.toml (see dot_config/chezmoi/chezmoi.toml.example)
 {{-     end}}
 {{- else}}
-# '.modular_com.env.MODULAR_AUTH' required in chezmoi.toml if this is desired:
-# $ export MODULAR_AUTH = "ma_1234567890"
-# $ export MODULAR_HOME="$HOME/.modular"
-# $ fish_add_path "$MODULAR_HOME/pkg/packages.modular.com_mojo/bin"
-# see dot_config/chezmoi/chezmoi.toml.example for examples
+# '.modular_com' not found in chezmoi.toml (see dot_config/chezmoi/chezmoi.toml.example)
 {{- end}}

@@ -60,5 +60,7 @@
     #     plugins_auto_install = ["mypkg1", "mypkg2"]
 
     # Modular Developer tools (for Mojo, etc.) require auth keys
+    # [data.modular_com]
+    #    developer_portal_email = "user@email.com"
     # [data.modular_com.env]
     #    MODULAR_AUTH = "auth-key-value"
