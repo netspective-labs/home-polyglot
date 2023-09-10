@@ -58,3 +58,7 @@
     # see https://github.com/asdf-vm/asdf-plugins for existing plugins; or, run `asdf plugin list all`
     # [data.packages.asdf.user]
     #     plugins_auto_install = ["mypkg1", "mypkg2"]
+
+    # Modular Developer tools (for Mojo, etc.) require auth keys
+    # [data.modular_com.env]
+    #    MODULAR_AUTH = "auth-key-value"
