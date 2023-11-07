@@ -2,12 +2,13 @@
 # To modify, use `chezmoi edit ~/.config/fish/conf.d/rust.fish --apply`. 
 
 # Get the current rust version and directory used by asdf
-set rust_info (asdf current rust)
+set ASDF_BIN $HOME/.asdf/bin/asdf
+set rust_info ($ASDF_BIN current rust)
 
-if test -z "(asdf list rust)"
+if test -z "($ASDF_BIN list rust)"
     # Rust is not installed via asdf
 else
-    set asdf_current_rust_version (asdf current rust | awk '{print $2}')
+    set asdf_current_rust_version ($ASDF_BIN current rust | awk '{print $2}')
     set asdf_rust_bin_path "$HOME/.asdf/installs/rust/$asdf_current_rust_version/bin"
 
     if test -d "$asdf_rust_bin_path"
